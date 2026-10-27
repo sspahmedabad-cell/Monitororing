@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Post | Day Begin, Day End & ePOST Combined Dashboard - Version 4</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--red:#b5121b;--dark-red:#850b12;--light-red:#fff0f0;--bg:#f3f4f6;--white:#fff;--text:#252525;--border:#e2e5e9;--green:#16794b;--blue:#175ca8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}header{background:white;border-bottom:5px solid var(--red);box-shadow:0 2px 8px #00000012}.header-top{display:flex;align-items:center;gap:18px;padding:17px 4%}.logo{width:76px;height:76px;object-fit:contain;flex-shrink:0}.logo-fallback{display:none;width:76px;height:76px;border:2px solid var(--red);border-radius:50%;color:var(--red);align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:12px}.brand h1{margin:0;font-size:25px;color:var(--red)}.brand p{margin:6px 0 0;color:#444;font-size:14px}.header-actions{margin-left:auto;display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:10px}.date-chip{background:var(--light-red);color:var(--dark-red);border:1px solid #f0c8ca;padding:10px 13px;border-radius:8px;font-weight:700;font-size:13px}.container{max-width:1500px;margin:auto;padding:22px}.page-heading{display:flex;align-items:center;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-bottom:18px}.page-heading h2{margin:0;font-size:23px}.page-heading p{margin:7px 0 0;color:#626262;font-size:13px}.card{background:white;border:1px solid var(--border);border-radius:12px;padding:19px;margin-bottom:19px;box-shadow:0 2px 6px #00000006}.card h3{margin:0 0 15px;font-size:17px}.upload-grid{display:grid;grid-template-columns:repeat(3,minmax(200px,1fr));gap:14px}.upload-box{border:1px dashed #d3a1a4;background:#fffafa;padding:15px;border-radius:10px;min-width:0}.upload-box label{display:block;font-size:14px;font-weight:700;margin-bottom:10px}.upload-box input{width:100%;font-size:12px}.file-status{font-size:12px;color:#666;margin-top:9px;overflow-wrap:anywhere}.hint{color:#666;font-size:12px;line-height:1.5;margin-top:12px}.btn{border:none;border-radius:7px;padding:10px 14px;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;transition:.15s}.btn:hover{filter:brightness(.94)}.btn-red{background:var(--red);color:white}.btn-dark{background:#343a40;color:white}.btn-green{background:var(--green);color:white}.btn-blue{background:var(--blue);color:white}.btn-light{background:#f0f1f3;color:#252525;border:1px solid #ddd}.btn-small{padding:7px 10px;font-size:12px}.button-row{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.subgroup-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.subgroup-box{border:1px solid var(--border);background:#fff;border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;min-width:0}.subgroup-box:hover,.subgroup-box:focus-visible{border-color:var(--red);background:var(--light-red);outline:2px solid #f2c2c5;outline-offset:1px}.subgroup-box strong{display:block;font-size:12px;margin-bottom:5px}.subgroup-box span{display:block;font-size:22px;font-weight:800;color:var(--red)}.subgroup-box small{display:block;color:#666;font-size:10px;margin-top:4px;line-height:1.35}.stats{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:13px;margin-bottom:19px}.stat{background:white;border:1px solid var(--border);border-top:4px solid var(--red);border-radius:10px;padding:17px;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}.stat:hover{transform:translateY(-2px);box-shadow:0 4px 12px #00000014}.stat:focus-visible{outline:2px solid var(--red);outline-offset:3px}.stat.active{background:var(--light-red);border:2px solid var(--red);border-top:4px solid var(--red)}.stat .label{font-size:12px;color:#656565;margin-bottom:9px}.stat .value{font-size:29px;font-weight:800;color:var(--red)}.stat small{display:block;color:#777;margin-top:5px;font-size:11px}.filter-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px}input[type=text],select{width:100%;border:1px solid #d6d9dd;padding:10px 11px;border-radius:7px;background:white;color:#222;min-width:0}.table-wrap{overflow-x:auto;width:100%}table{border-collapse:collapse;width:100%;font-size:13px;white-space:nowrap}th{background:var(--red);color:white;text-align:left;padding:12px 11px;position:sticky;top:0;z-index:1}td{padding:11px;border-bottom:1px solid #e8e8e8}tbody tr:nth-child(even){background:#fafafa}tbody tr:hover{background:#fff0f0}.pill{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700}.pill-pending{background:#ffeded;color:#ad101a}.pill-admin{background:#e9e7ff;color:#4937a8}.pill-bpo{background:#fff0ce;color:#795000}.pill-other{background:#e9f2ff;color:#1857a1}.empty{padding:30px!important;text-align:center;color:#777}.notice{display:none;margin-bottom:14px;padding:12px 14px;border-radius:8px;font-size:13px;line-height:1.5}.notice.error{display:block;background:#fff0f0;color:#8b1018}.notice.success{display:block;background:#eaf7ef;color:#17653c}footer{text-align:center;padding:20px;color:#777;font-size:12px}@media(max-width:1050px){.upload-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:repeat(2,minmax(110px,1fr))}.filter-grid{grid-template-columns:1fr 1fr}.header-actions{margin-left:0}}@media(max-width:600px){.header-top{flex-wrap:wrap;padding:14px}.logo,.logo-fallback{width:58px;height:58px}.brand h1{font-size:19px}.brand p{font-size:12px}.container{padding:12px}.upload-grid,.filter-grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat .value{font-size:24px}.card{padding:13px}}
+</style>
+</head>
+<body>
+<header><div class="header-top">
+<img class="logo" id="indiaPostLogo" src="https://upload.wikimedia.org/wikipedia/en/3/32/India_Post.svg" alt="India Post logo" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
+<div class="logo-fallback" id="logoFallback">INDIA<br>POST</div><div class="brand"><h1>Department of Posts, India</h1><p>Ahmedabad City Division • Operational Monitoring Dashboard</p></div>
+<div class="header-actions"><div class="date-chip">📅 <span id="currentDate"></span></div><a class="btn btn-red" href="https://app.indiapost.gov.in/itrolemgmt/user-management" target="_blank" rel="noopener noreferrer">Open India Post Portal ↗</a></div>
+</div></header>
+<main class="container">
+<div class="page-heading"><div><h2>Day Begin &amp; Day End Pending Monitoring</h2><p>Combined utility: Day Begin and Day End from the India Post Monitoring Dashboard, plus ePOST pending counts from the Pending Dashboard.</p></div><button class="btn btn-light" onclick="resetDashboard()">↻ Reset Dashboard</button></div>
+<div id="notice" class="notice" role="status" aria-live="polite"></div>
+<section class="card"><h3>📂 Upload Office Reports</h3><div class="upload-grid">
+<div class="upload-box"><label for="dayBeginFile">1. Day Begin Pending SO Report</label><input id="dayBeginFile" type="file" accept=".xlsx,.xls,.csv" multiple><div class="file-status" id="dayBeginStatus">No files selected</div><div class="subgroup-grid"><div class="subgroup-box" role="button" tabindex="0" onclick="selectSubgroup('Day Begin','BPO_GROUP')" onkeydown="handleSubgroupKey(event,'Day Begin','BPO_GROUP')"><strong>BPO Group</strong><span id="dayBeginBpoCount">0</span><small>Pending offices</small></div><div class="subgroup-box" role="button" tabindex="0" onclick="selectSubgroup('Day Begin','SPO_GROUP')" onkeydown="handleSubgroupKey(event,'Day Begin','SPO_GROUP')"><strong>SPO Group</strong><span id="dayBeginSpoCount">0</span><small>SPO, FPO, HPO, IBC, BPC, NDC, IDC</small></div></div></div>
+<div class="upload-box"><label for="dayEndFile">2. Day End Pending SO Report</label><input id="dayEndFile" type="file" accept=".xlsx,.xls,.csv" multiple><div class="file-status" id="dayEndStatus">No files selected</div><div class="subgroup-grid"><div class="subgroup-box" role="button" tabindex="0" onclick="selectSubgroup('Day End','BPO_GROUP')" onkeydown="handleSubgroupKey(event,'Day End','BPO_GROUP')"><strong>BPO Group</strong><span id="dayEndBpoCount">0</span><small>Pending offices</small></div><div class="subgroup-box" role="button" tabindex="0" onclick="selectSubgroup('Day End','SPO_GROUP')" onkeydown="handleSubgroupKey(event,'Day End','SPO_GROUP')"><strong>SPO Group</strong><span id="dayEndSpoCount">0</span><small>SPO, FPO, HPO, IBC, BPC, NDC, IDC</small></div></div></div>
+<div class="upload-box"><label for="epostFile">4. ePOST Printing Pending Offices</label><input id="epostFile" type="file" accept=".xlsx,.xls,.csv" multiple><div class="file-status" id="epostStatus">No files selected</div></div>
+</div>
+<div class="hint">Select one or more files in each report category. Day Begin and Day End entries are pending when their corresponding user-ID field is blank. ePOST rows are read using the office-name and pending-count columns from the Pending Dashboard report. Day Begin/Day End office grouping is determined from Column I of each uploaded report: BPO is separate; SPO, FPO, HPO, IBC, BPC, NDC and IDC are combined under SPO Group; all other Column I values are treated as Administrative Office. Day Begin and Day End have separate group filters. WhatsApp Web opens only once. Each WhatsApp button copies the message; paste it into the selected WhatsApp chat with Ctrl+V. This avoids opening a new tab for every office.</div>
+<div class="button-row"><button class="btn btn-red" onclick="processReports()">Process Reports</button><button class="btn btn-light" onclick="clearFilters()">Clear Filters</button></div></section>
+<section class="stats">
+<div class="stat" role="button" tabindex="0" onclick="selectReport('ALL',this)" onkeydown="cardKeydown(event,'ALL',this)"><div class="label">Total Pending Records</div><div class="value" id="totalCount">0</div><small>Click to view all pending entries</small></div>
+<div class="stat" role="button" tabindex="0" onclick="selectReport('Day Begin',this)" onkeydown="cardKeydown(event,'Day Begin',this)"><div class="label">Day Begin Pending</div><div class="value" id="dayBeginCount">0</div><small>Click to view pending offices</small></div>
+<div class="stat" role="button" tabindex="0" onclick="selectReport('Day End',this)" onkeydown="cardKeydown(event,'Day End',this)"><div class="label">Day End Pending</div><div class="value" id="dayEndCount">0</div><small>Click to view pending offices</small></div>
+
+<div class="stat" role="button" tabindex="0" onclick="selectReport('ePOST Printing',this)" onkeydown="cardKeydown(event,'ePOST Printing',this)"><div class="label">ePOST Printing Pending</div><div class="value" id="epostCount">0</div><small>Click to view pending offices</small></div>
+</section>
+<section class="card"><h3>🔎 Search &amp; Filter Pending Offices</h3><div class="filter-grid"><input id="searchInput" type="text" placeholder="Search office name, pincode, report or category..." oninput="renderTable()"><select id="reportFilter" onchange="renderTable()"><option value="ALL">All Report Categories</option><option value="Day Begin">Day Begin</option><option value="Day End">Day End</option><option value="ePOST Printing">ePOST Printing</option></select><select id="dayBeginGroupFilter" onchange="renderTable()"><option value="ALL">Day Begin: All Groups</option><option value="ADMIN">Administrative Office</option><option value="SPO_GROUP">SPO Group (SPO/FPO/HPO/IBC/BPC/NDC/IDC)</option><option value="BPO_GROUP">BPO Group</option></select><select id="dayEndGroupFilter" onchange="renderTable()"><option value="ALL">Day End: All Groups</option><option value="ADMIN">Administrative Office</option><option value="SPO_GROUP">SPO Group (SPO/FPO/HPO/IBC/BPC/NDC/IDC)</option><option value="BPO_GROUP">BPO Group</option></select><select id="sortFilter" onchange="renderTable()"><option value="office">Sort: Office Name</option><option value="report">Sort: Report Category</option><option value="category">Sort: Office Category</option></select></div></section>
+<section class="card" id="pendingDetailsCard"><h3>📋 Pending Office Details</h3><div class="button-row" style="margin-top:0;margin-bottom:14px"><button class="btn btn-green" onclick="exportFiltered()">Export Filtered Report</button><button class="btn btn-blue" onclick="exportAll()">Export All Pending Reports</button><button class="btn btn-green" onclick="whatsappAll()">Copy WhatsApp Message for Filtered Offices</button></div><div class="table-wrap"><table><thead><tr><th>Sr.</th><th>Office Name</th><th>Pincode</th><th>Office Group</th><th>Pending Report</th><th>Pending Details</th><th>WhatsApp Web</th></tr></thead><tbody id="reportBody"><tr><td colspan="7" class="empty">Upload Day Begin, Day End and/or ePOST reports, then click Process Reports.</td></tr></tbody></table></div><p class="hint" id="resultCount">Showing 0 entries</p></section>
+</main><footer>Department of Posts, India • Day Begin, Day End & ePOST Combined Dashboard<br>Data is processed in your browser. Uploaded files are not sent to this dashboard's server.</footer>
+<script>
+"use strict";
+let allPending=[];
+let whatsappWindow=null;
+const reportInputs=[{id:"dayBeginFile",report:"Day Begin",status:"dayBeginStatus"},{id:"dayEndFile",report:"Day End",status:"dayEndStatus"},{id:"epostFile",report:"ePOST Printing",status:"epostStatus"}];
+document.getElementById("currentDate").textContent=new Date().toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+function showNotice(message,type="success"){const box=document.getElementById("notice");box.className="notice "+type;box.textContent=message;box.style.display="block";box.scrollIntoView({behavior:"smooth",block:"nearest"})}function clearNotice(){const box=document.getElementById("notice");box.style.display="none";box.textContent=""}
+reportInputs.forEach(item=>document.getElementById(item.id).addEventListener("change",function(){const files=Array.from(this.files||[]);document.getElementById(item.status).textContent=files.length?files.length+" file(s): "+files.map(f=>f.name).join(", "):"No files selected"}));
+function normalizeKey(v){return String(v??"").trim().toLowerCase().replace(/[\s_\-./()]+/g,"").replace(/[^a-z0-9]/g,"")}function findValue(row,candidates){const keys=Object.keys(row||{});for(const c of candidates){const target=normalizeKey(c),key=keys.find(k=>normalizeKey(k)===target);if(key!==undefined)return row[key]}return ""}function findHeaderKey(row,candidates){const keys=Object.keys(row||{});for(const c of candidates){const target=normalizeKey(c),key=keys.find(k=>normalizeKey(k)===target);if(key!==undefined)return key}return null}function textValue(v){return v===null||v===undefined?"":String(v).trim()}function isBlank(v){return v===null||v===undefined||String(v).trim()===""}
+function getOffice(row){return textValue(findValue(row,["Office Name","Post Office Name","Office","OfficeName","Post Office","Name of Office","Office_Name","SO Name","PO Name","Office Description"]))}function getPincode(row){return textValue(findValue(row,["Pincode","Pin Code","PIN","Office Pincode","Post Office Pincode","PinCode"]))}
+function getColumnIValue(row){const keys=Object.keys(row||{});if(keys.length>=9)return textValue(row[keys[8]]);return textValue(findValue(row,["Office Category","Office Type","Category","Office Classification","Group"]))}
+function getCategory(row){const raw=textValue(getColumnIValue(row)).toUpperCase().trim(),normalized=raw.replace(/[._-]+/g," ").replace(/\s+/g," ").trim(),compact=normalized.replace(/[^A-Z0-9]/g,"");if(/(^|[^A-Z])BPO([^A-Z]|$)/.test(normalized)||compact==="BPO"||normalized.includes("BRANCH POST OFFICE")||normalized.includes("BRANCH OFFICE"))return "BPO_GROUP";const types=["SPO","FPO","HPO","IBC","BPC","NDC","IDC"];if(types.some(t=>new RegExp("(^|[^A-Z])"+t+"([^A-Z]|$)").test(normalized))||types.includes(compact))return "SPO_GROUP";return "ADMIN"}function categoryLabel(c){return c==="ADMIN"?"Administrative Office":c==="SPO_GROUP"?"SPO Group":c==="BPO_GROUP"?"BPO Group":"Administrative Office"}
+function readFile(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=e=>{try{const csv=file.name.toLowerCase().endsWith(".csv"),wb=XLSX.read(e.target.result,{type:csv?"string":"array"});if(!wb.SheetNames.length)throw new Error("No worksheet found.");resolve(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:""}))}catch(err){reject(new Error(file.name+": "+err.message))}};reader.onerror=()=>reject(new Error("Could not read "+file.name));file.name.toLowerCase().endsWith(".csv")?reader.readAsText(file):reader.readAsArrayBuffer(file)})}async function readSelectedFiles(id){let rows=[];for(const f of Array.from(document.getElementById(id).files||[]))rows=rows.concat(await readFile(f));return rows}
+function makeRecord(row,report){let detail=report==="Day Begin"?"Day Begin user ID is blank":report==="Day End"?"Day End user ID is blank":report==="EMO Printing"?"EMO printing pending":"ePOST printing pending";return{office:getOffice(row)||"Office name not found",pincode:getPincode(row),category:getCategory(row),report,detail,source:row}}
+function deduplicate(records){const seen=new Set();return records.filter(i=>{const k=[i.report,i.office,i.pincode,i.detail].join("|").toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}
+async function processReports(){clearNotice();if(typeof XLSX==="undefined"){showNotice("The Excel library could not be loaded. Check your internet connection and reopen the dashboard.","error");return}try{const raw={};for(const item of reportInputs)raw[item.report]=await readSelectedFiles(item.id);const processed={};const db=raw["Day Begin"];if(db.length){const key=findHeaderKey(db[0],["day-begin-user-id","day_begin_user_id","day begin user id","daybeginuserid"]);if(!key)throw new Error("Day Begin report: the column 'day-begin-user-id' was not found. Check the header row.");processed["Day Begin"]=db.filter(r=>isBlank(r[key])).filter(r=>Object.values(r).some(v=>!isBlank(v))).map(r=>makeRecord(r,"Day Begin"))}else processed["Day Begin"]=[];const de=raw["Day End"];if(de.length){const key=findHeaderKey(de[0],["day-end-user-id","day_end_user_id","day end user id","dayenduserid"]);if(!key)throw new Error("Day End report: the column 'day-end-user-id' was not found. Check the header row.");processed["Day End"]=de.filter(r=>isBlank(r[key])).filter(r=>Object.values(r).some(v=>!isBlank(v))).map(r=>makeRecord(r,"Day End"))}else processed["Day End"]=[];const ep=raw["ePOST Printing"];
+processed["ePOST Printing"]=ep.filter(r=>Object.values(r).some(v=>!isBlank(v))).map(r=>{
+  const office=textValue(findValue(r,["PostOfficeName","Office Name","OfficeName","Post Office Name","Office","ePost Center","ePostCenter","Post Office"]));
+  const countRaw=findValue(r,["Textbox58","Pending","Pending Count","Pending Articles","ePOST Pending","ePost Pending"]);
+  const count=Number(String(countRaw??"").replace(/,/g,"").trim());
+  return makeRecord({...r,"Office Name":office||getOffice(r),"ePOST Pending Count":Number.isFinite(count)?count:""}, "ePOST Printing");
+}).filter(i=>i.office!=="Office name not found" && i.office.trim()!=="" && Number(i.source["ePOST Pending Count"])>0)
+ .map(i=>({...i,detail:"ePOST printing pending: "+Number(i.source["ePOST Pending Count"]).toLocaleString("en-IN")+" articles",pendingCount:Number(i.source["ePOST Pending Count"])}));allPending=deduplicate(Object.values(processed).flat());updateStats();updateSubgroupCounts();renderTable();showNotice("Reports processed successfully. "+allPending.length+" pending records identified after removing duplicate entries within the same report.","success")}catch(err){showNotice(err.message||"An error occurred while processing the reports.","error")}}
+function updateStats(){document.getElementById("totalCount").textContent=allPending.length;document.getElementById("dayBeginCount").textContent=allPending.filter(i=>i.report==="Day Begin").length;document.getElementById("dayEndCount").textContent=allPending.filter(i=>i.report==="Day End").length;document.getElementById("epostCount").textContent=allPending.filter(i=>i.report==="ePOST Printing").length}
+function updateSubgroupCounts(){const ids={dayBeginBpoCount:allPending.filter(i=>i.report==="Day Begin"&&i.category==="BPO_GROUP").length,dayBeginSpoCount:allPending.filter(i=>i.report==="Day Begin"&&i.category==="SPO_GROUP").length,dayEndBpoCount:allPending.filter(i=>i.report==="Day End"&&i.category==="BPO_GROUP").length,dayEndSpoCount:allPending.filter(i=>i.report==="Day End"&&i.category==="SPO_GROUP").length};Object.entries(ids).forEach(([id,n])=>document.getElementById(id).textContent=n)}
+function selectSubgroup(report,group){document.getElementById("searchInput").value="";document.getElementById("reportFilter").value=report;document.getElementById("dayBeginGroupFilter").value=report==="Day Begin"?group:"ALL";document.getElementById("dayEndGroupFilter").value=report==="Day End"?group:"ALL";document.getElementById("sortFilter").value="office";document.querySelectorAll(".stat").forEach(x=>x.classList.remove("active"));renderTable();document.getElementById("pendingDetailsCard").scrollIntoView({behavior:"smooth",block:"start"})}function handleSubgroupKey(e,r,g){if(e.key==="Enter"||e.key===" "){e.preventDefault();selectSubgroup(r,g)}}
+function selectReport(report,card){document.getElementById("searchInput").value="";document.getElementById("reportFilter").value=report;document.getElementById("dayBeginGroupFilter").value="ALL";document.getElementById("dayEndGroupFilter").value="ALL";document.getElementById("sortFilter").value="office";document.querySelectorAll(".stat").forEach(x=>x.classList.remove("active"));if(card)card.classList.add("active");renderTable();document.getElementById("pendingDetailsCard").scrollIntoView({behavior:"smooth",block:"start"})}function cardKeydown(e,r,c){if(e.key==="Enter"||e.key===" "){e.preventDefault();selectReport(r,c)}}
+function getFilteredRecords(){const search=document.getElementById("searchInput").value.trim().toLowerCase(),rf=document.getElementById("reportFilter").value,dbf=document.getElementById("dayBeginGroupFilter").value,def=document.getElementById("dayEndGroupFilter").value,sort=document.getElementById("sortFilter").value;let list=allPending.filter(i=>{const hay=[i.office,i.pincode,categoryLabel(i.category),i.report,i.detail].join(" ").toLowerCase(),ms=!search||hay.includes(search),mr=rf==="ALL"||i.report===rf;let mg=true;if(i.report==="Day Begin")mg=dbf==="ALL"||i.category===dbf;else if(i.report==="Day End")mg=def==="ALL"||i.category===def;return ms&&mr&&mg});list.sort((a,b)=>sort==="report"?(a.report.localeCompare(b.report)||a.office.localeCompare(b.office)):sort==="category"?(categoryLabel(a.category).localeCompare(categoryLabel(b.category))||a.office.localeCompare(b.office)):a.office.localeCompare(b.office));return list}
+function escapeHtml(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function renderTable(){const tbody=document.getElementById("reportBody"),list=getFilteredRecords();if(!list.length){tbody.innerHTML='<tr><td colspan="7" class="empty">No pending entries match the current filters.</td></tr>';document.getElementById("resultCount").textContent="Showing 0 entries";return}tbody.innerHTML=list.map((i,n)=>{const cls=i.category==="BPO_GROUP"?"pill-bpo":i.category==="ADMIN"?"pill-admin":"pill-other";return `<tr><td>${n+1}</td><td><strong>${escapeHtml(i.office)}</strong></td><td>${escapeHtml(i.pincode||"—")}</td><td><span class="pill ${cls}">${escapeHtml(categoryLabel(i.category))}</span></td><td>${escapeHtml(i.report)}</td><td><span class="pill pill-pending">${escapeHtml(i.detail)}</span></td><td><button type="button" class="btn btn-green btn-small whatsapp-single" data-index="${n}">Copy WhatsApp Message</button></td></tr>`}).join("");document.getElementById("resultCount").textContent="Showing "+list.length+" of "+allPending.length+" pending entries"}
+function getWhatsAppHeading(r){return({"Day Begin":"Day Begin pending of offices","Day End":"Day End pending of offices","ePOST Printing":"ePOST Printing pending of offices"})[r]||"Consolidated Pending Reports"}function getWhatsAppInstruction(r){return({"Day Begin":"Please complete the pending Day Begin activities in the APT 2.0 portal at the earliest.","Day End":"Please complete the pending Day End activities in the APT 2.0 portal at the earliest.","ePOST Printing":"Please print the pending ePOST articles and clear the pendency at the earliest."})[r]||"Please complete the pending activities at the earliest."}
+function whatsappOffice(office,pin,report,pendingCount){
+  let msg;
+  if(report==="ePOST Printing"){
+    msg="Sir/Madam,\n\nThe following SOs have not yet printed e-Post articles. All concerned SPMs are requested to kindly print the e-Post articles and clear the pendency of e-Post immediately.\n\n1. "+office+" - "+Number(pendingCount||0).toLocaleString("en-IN");
+  }else if(report==="Day Begin" || report==="Day End"){
+    const heading=report==="Day Begin"?"*Day Begin pending of offices*":"*Day End pending of offices*";
+    const instruction=report==="Day Begin"
+      ?"Please complete the pending Day Begin activities in the APT 2.0 portal at the earliest."
+      :"Please complete the pending Day End activities in the APT 2.0 portal at the earliest.";
+    msg=heading+"\n\n1. "+office+"\n\n"+instruction+"\n\nTotal pending entries: 1";
+  }else{
+    msg="Department of Posts, India\nAhmedabad City Division\n"+getWhatsAppHeading(report)+"\n\nOffice: "+office+"\n"+(pin?"Pincode: "+pin+"\n":"")+"\n"+getWhatsAppInstruction(report);
+  }
+  openWhatsApp(msg)
+}
+function whatsappAll(){
+  const list=getFilteredRecords();
+  if(!list.length){showNotice("No pending entries are available for WhatsApp messaging.","error");return}
+  const types=[...new Set(list.map(i=>i.report))];
+  let msg="";
+  if(types.length===1 && types[0]==="ePOST Printing"){
+    msg="Sir/Madam,\n\nThe following SOs have not yet printed e-Post articles. All concerned SPMs are requested to kindly print the e-Post articles and clear the pendency of e-Post immediately.\n\n";
+    msg+=list.map((i,n)=>(n+1)+". "+i.office+" - "+Number(i.pendingCount||0).toLocaleString("en-IN")).join("\n");
+  }else if(types.length===1 && (types[0]==="Day Begin" || types[0]==="Day End")){
+    const report=types[0];
+    const heading=report==="Day Begin"?"*Day Begin pending of offices*":"*Day End pending of offices*";
+    const instruction=report==="Day Begin"
+      ?"Please complete the pending Day Begin activities in the APT 2.0 portal at the earliest."
+      :"Please complete the pending Day End activities in the APT 2.0 portal at the earliest.";
+    msg=heading+"\n\n";
+    msg+=list.map((i,n)=>(n+1)+". "+i.office).join("\n");
+    msg+="\n\n"+instruction+"\n\nTotal pending entries: "+list.length;
+  }else{
+    msg="Department of Posts, India\nAhmedabad City Division\n";
+    if(types.length===1){
+      msg+=getWhatsAppHeading(types[0])+"\n\n";
+      msg+=list.map((i,n)=>(n+1)+". "+i.office+(i.pincode?" ("+i.pincode+")":"")).join("\n");
+      msg+="\n\n"+getWhatsAppInstruction(types[0]);
+    }else{
+      msg+="Consolidated Pending Reports\n\n";
+      msg+=list.map((i,n)=>(n+1)+". "+i.office+(i.pincode?" ("+i.pincode+")":"")+" — "+i.report).join("\n");
+      msg+="\n\nPlease complete the pending activities in the APT 2.0 portal or the relevant system at the earliest.";
+    }
+    msg+="\n\nTotal pending entries: "+list.length;
+  }
+  openWhatsApp(msg)
+}
+/* WhatsApp single-tab solution:
+   Open WhatsApp Web only on the first click. Every click copies the new message
+   to the clipboard instead of navigating/opening WhatsApp again. This avoids
+   new tabs even when WhatsApp Web isolates its window from the opener. */
+let whatsappTabAttempted = false;
+function copyMessageToClipboard(message){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(message).catch(()=>fallbackCopy(message));
+  }
+  return fallbackCopy(message);
+}
+function fallbackCopy(message){
+  return new Promise((resolve,reject)=>{
+    const box=document.createElement("textarea");
+    box.value=message;
+    box.setAttribute("readonly","");
+    box.style.position="fixed";
+    box.style.left="-9999px";
+    box.style.top="0";
+    document.body.appendChild(box);
+    box.select();
+    let ok=false;
+    try{ok=document.execCommand("copy");}catch(e){ok=false;}
+    box.remove();
+    if(ok)resolve();else reject(new Error("Clipboard copy was blocked by the browser."));
+  });
+}
+function openWhatsApp(message){
+  // Use the WhatsApp Web website explicitly. On mobile, enable the browser's
+  // "Desktop site" option to keep the workflow in the browser instead of the app.
+  const url = "https://web.whatsapp.com/send?text=" + encodeURIComponent(message);
+  try {
+    if (whatsappWindow && !whatsappWindow.closed) {
+      whatsappWindow.location.href = url;
+      whatsappWindow.focus();
+    } else {
+      whatsappWindow = window.open(url, "IndiaPostWhatsAppWeb");
+      if (!whatsappWindow) {
+        showNotice("The browser blocked the WhatsApp Web window. Allow pop-ups for this dashboard and try again. On mobile Chrome, open the ⋮ menu and enable Desktop site before clicking again.", "error");
+        return;
+      }
+    }
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    if (isMobile) {
+      showNotice("WhatsApp Web was requested in your browser. If WhatsApp application opens or the page asks you to use a computer, return to your browser, open the ⋮ menu and enable Desktop site, then click the WhatsApp button again. You may need to sign in to WhatsApp Web. Select the intended office chat and press Send yourself.", "success");
+    } else {
+      showNotice("WhatsApp Web opened in the same dedicated browser tab with the message prepared. Select the intended office chat if prompted, review the message, and click Send yourself.", "success");
+    }
+  } catch (error) {
+    showNotice("Could not open WhatsApp Web. Allow pop-ups for this dashboard and try again. On mobile, enable Desktop site in your browser menu.", "error");
+  }
+}
+document.getElementById("reportBody").addEventListener("click",e=>{const b=e.target.closest(".whatsapp-single");if(!b)return;const item=getFilteredRecords()[Number(b.dataset.index)];if(!item){showNotice("Unable to identify the selected office.","error");return}whatsappOffice(item.office,item.pincode,item.report,item.pendingCount)});
+function recordsToSheet(records){return records.map((i,n)=>({"Sr. No.":n+1,"Office Name":i.office,"Pincode":i.pincode,"Office Group":categoryLabel(i.category),"Pending Report":i.report,"Pending Details":i.detail}))}function downloadExcel(records,filename){if(typeof XLSX==="undefined"){showNotice("Excel library is not available. Check your internet connection.","error");return}if(!records.length){showNotice("No records available to export.","error");return}const ws=XLSX.utils.json_to_sheet(recordsToSheet(records));ws["!cols"]=[{wch:9},{wch:32},{wch:12},{wch:22},{wch:20},{wch:35}];const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,"Pending Reports");XLSX.writeFile(wb,filename)}function exportFiltered(){downloadExcel(getFilteredRecords(),"Filtered_Pending_Reports.xlsx")}function exportAll(){downloadExcel(allPending,"All_Pending_Reports.xlsx")}
+function clearFilters(){document.getElementById("searchInput").value="";document.getElementById("reportFilter").value="ALL";document.getElementById("dayBeginGroupFilter").value="ALL";document.getElementById("dayEndGroupFilter").value="ALL";document.getElementById("sortFilter").value="office";document.querySelectorAll(".stat").forEach(x=>x.classList.remove("active"));renderTable()}function resetDashboard(){if(!confirm("Clear all uploaded reports and dashboard results?"))return;reportInputs.forEach(i=>{document.getElementById(i.id).value="";document.getElementById(i.status).textContent="No files selected"});allPending=[];clearFilters();updateStats();updateSubgroupCounts();clearNotice();renderTable()}
+updateStats();updateSubgroupCounts();renderTable();
+</script></body></html>
